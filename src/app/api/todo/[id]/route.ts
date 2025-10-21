@@ -1,31 +1,50 @@
 import { prisma } from "@/app/utils/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const deletedTodo = await prisma.todo.delete({
-      where: {
-        id: params.id,
-      },
-    });
-    return NextResponse.json(deletedTodo, { status: 200 });
-  } catch (err) {
-    console.error(err, "Error deleting item");
-    return NextResponse.json({ message: "Error occurred" }, { status: 500 });
-  }
-}
-
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
-  try {
+    const { id } = await context.params; // 👈 Notice the 'await' here
     const body = await request.json();
+    const { completed, title, content } = body;
+
     const updatedTodo = await prisma.todo.update({
-      where: { id: params.id },
-      data: body,
+      where: { id },
+      data: { completed, title, content },
     });
 
     return NextResponse.json(updatedTodo, { status: 200 });
-  } catch (err) {
-    console.error(err, "Error updating item");
-    return NextResponse.json({ message: "Error occurred" }, { status: 500 });
+  } catch (error) {
+    console.error("PATCH Error:", error);
+    return NextResponse.json(
+      { message: "An error occurred while updating the todo." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await context.params;
+
+    await prisma.todo.delete({
+      where: { id },
+    });
+
+    return NextResponse.json(
+      { message: "Todo deleted successfully." },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("DELETE Error:", error);
+    return NextResponse.json(
+      { message: "Failed to delete todo." },
+      { status: 500 }
+    );
   }
 }
