@@ -1,6 +1,13 @@
 import { prisma } from "@/app/utils/db";
 import { NextRequest, NextResponse } from "next/server";
 
+
+export async function GET() {
+  const todos = await prisma.todo.findMany();
+  return NextResponse.json(todos);
+}
+
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
