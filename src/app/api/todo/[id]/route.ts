@@ -6,7 +6,7 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await context.params; // 👈 Notice the 'await' here
+    const { id } = await context.params;
     const body = await request.json();
     const { completed, title, content } = body;
 
@@ -32,14 +32,9 @@ export async function DELETE(
   try {
     const { id } = await context.params;
 
-    await prisma.todo.delete({
-      where: { id },
-    });
+    await prisma.todo.delete({ where: { id } });
 
-    return NextResponse.json(
-      { message: "Todo deleted successfully." },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: "Todo deleted successfully." }, { status: 200 });
   } catch (error) {
     console.error("DELETE Error:", error);
     return NextResponse.json(

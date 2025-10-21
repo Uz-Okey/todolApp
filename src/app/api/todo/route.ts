@@ -1,12 +1,15 @@
 import { prisma } from "@/app/utils/db";
 import { NextRequest, NextResponse } from "next/server";
 
-
 export async function GET() {
-  const todos = await prisma.todo.findMany();
-  return NextResponse.json(todos);
+  try {
+    const todos = await prisma.todo.findMany();
+    return NextResponse.json(todos);
+  } catch (err) {
+    console.error("GET Error:", err);
+    return NextResponse.json({ message: "Error fetching todos" }, { status: 500 });
+  }
 }
-
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(newTodo, { status: 201 });
   } catch (err) {
-    console.error("Error creating todo:", err);
+    console.error("POST Error:", err);
     return NextResponse.json({ message: "Error creating todo" }, { status: 500 });
   }
 }
