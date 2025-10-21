@@ -29,18 +29,19 @@ export default function Home() {
             >
               <div className="flex flex-col items-center justify-center gap-2 px-4">
                 <Link href="/todoform">
-                <Badge
-                  variant="secondary"
-                  className="bg-yellow-900/40 backdrop-blur-3xl text-[16px] font-bold text-gray-200 border-yellow-500/30 py-[2px] relative"
-                >
-                  
+                  <Badge
+                    variant="secondary"
+                    className="bg-yellow-900/40 backdrop-blur-3xl text-[16px] font-bold text-gray-200 border-yellow-500/30 py-[2px] relative"
+                  >
+
                     Click here to create a todo
-                
-                </Badge>
-                  </Link>
-                <p className="text-white text-[15px] text-center leading-tight max-w-xs">
-                  Add your daily goals and track them easily.
-                </p>
+
+                  </Badge>
+
+                  <p className="text-white text-[15px] text-center leading-tight max-w-xs">
+                    Add your daily goals and track them easily.
+                  </p>
+                </Link>
               </div>
             </ThreeDLayeredCard>
 
