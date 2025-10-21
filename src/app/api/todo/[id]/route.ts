@@ -1,34 +1,31 @@
 import { prisma } from "@/app/utils/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
   try {
-    const { id } = await context.params;
-
     const deletedTodo = await prisma.todo.delete({
-      where: { id },
+      where: {
+        id: params.id,
+      },
     });
-
     return NextResponse.json(deletedTodo, { status: 200 });
   } catch (err) {
-    console.error("Error deleting todo:", err);
-    return NextResponse.json({ message: "Error deleting todo" }, { status: 500 });
+    console.error(err, "Error deleting item");
+    return NextResponse.json({ message: "Error occurred" }, { status: 500 });
   }
 }
 
-export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const { id } = await context.params;
     const body = await request.json();
-
     const updatedTodo = await prisma.todo.update({
-      where: { id },
+      where: { id: params.id },
       data: body,
     });
 
     return NextResponse.json(updatedTodo, { status: 200 });
   } catch (err) {
-    console.error("Error updating todo:", err);
-    return NextResponse.json({ message: "Error updating todo" }, { status: 500 });
+    console.error(err, "Error updating item");
+    return NextResponse.json({ message: "Error occurred" }, { status: 500 });
   }
 }
