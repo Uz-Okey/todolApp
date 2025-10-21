@@ -1,11 +1,15 @@
 'use client'
 
+import { useRouter } from "next/navigation"; // 👈 You need to import useRouter here
+
 interface checkboxValue {
     id: string,
     completed: boolean,
 }
 
 export default function CompletedButton({ id, completed }: checkboxValue) {
+    // 👈 Instantiate useRouter if you didn't have it before
+    const router = useRouter() 
 
     async function handleMark(e: React.ChangeEvent<HTMLInputElement>) {
         try {
@@ -17,8 +21,10 @@ export default function CompletedButton({ id, completed }: checkboxValue) {
                 }
             )
 
-            if (req) {
-                window.location.reload()
+            if (req.ok) {
+                // ✅ FIX: Use router.refresh() to re-fetch the todo list data
+                // DO NOT use window.location.reload()
+                router.refresh() 
             }
         } catch (err) {
             console.error(err, 'error unable to mark')
