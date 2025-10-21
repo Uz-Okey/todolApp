@@ -1,6 +1,6 @@
 import { prisma } from "@/app/utils/db"
-import Completed from "@/completed/page"
-import Deleteitem from "../deleteitem/page"
+import CompletedButton from "@/app/components/CompletedButton" // Adjust the path as needed
+import DeleteButton from "@/app/components/DeleteButton"
 async function getData() {
     const data = await prisma.todo.findMany({
         select: {
@@ -24,7 +24,7 @@ export default async function todoitems() {
 
                     <div className="flex space-x-4 ">
                         <div>
-                            <Completed id={item.id} completed={item.completed || false} />
+                    <CompletedButton id={item.id} completed={item.completed || false} />
                         </div>
 
 
@@ -32,7 +32,7 @@ export default async function todoitems() {
                             {item.content}
                         </p>
 
-                        <Deleteitem id={item.id} />
+                        <DeleteButton id={item.id} />
                     </div>
 
 
